@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suivi des dépenses</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Suivi des dépenses</h1>
+    <div id="soldeContainer">
+        <h2>Solde actuel : <span id="solde">0</span></h2>
+    </div>
+    <div id="divBtn">
+        <button id="btnAddDepense">Ajouter une dépense</button>
+        <button id="btnAddRevenu">Ajouter un revenu</button>
+        <button id="btnHistorique">Voir l'historique</button>
+    </div>
+    <div class ="form-container hidden" id="formContainerDepense">
+        <form id="formDepense" >
+            <button type="button" id="btnCloseDepense">X</button>
+            <h3>Ajouter une dépense</h3>
+            <label for="montantDepense">Montant :</label>
+            <input type="number" id="montantDepense" required>
+            <label for="categorieDepense">Catégorie :</label>
+            <input type="text" id="categorieDepense" required>
+            <label for="accountTypeDepense">Type de compte :</label>
+            <select id="accountTypeDepense" required>
+                <option value="comptePersonnelDepense">Compte personnel</option>
+                <option value="compteCommunDepense">Compte commun</option>
+            </select>
+            <button type="submit">Ajouter</button>
+        </form>
+    </div>
+    <div class ="form-container hidden" id="formContainerRevenu">
+        <form id="formRevenu">
+            <button type="button" id="btnCloseRevenu">X</button>
+            <h3>Ajouter un revenu</h3>
+            <label for="montantRevenu">Montant :</label>
+            <input type="number" id="montantRevenu" required>
+            <label for="categorieRevenu">Catégorie :</label>
+            <input type="text" id="categorieRevenu" required>
+            <label for="dateRevenu">Date :</label>
+            <input type="date" id="dateRevenu" required>
+            <label for="accountTypeRevenu">Type de compte :</label>
+            <select id="accountTypeRevenu" required>
+                <option value="comptePersonnelRevenu">Compte personnel</option>
+                <option value="compteCommunRevenu">Compte commun</option>
+            </select>
+            <button type="submit">Ajouter</button>
+        </form>
+    </div>
+
+    <div id="historiqueContainer" class="hidden">
+        <h3>Historique des transactions</h3>
+        <ul id="historiqueList"></ul>
+    </div>
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>
