@@ -8,15 +8,17 @@ export async function fetchElement () {
         console.log(`Oups, il y a eu une erreur: ${erreur}`);
     }
 };
-
-export async function addElement (newAmount) {
+export async function fetchElementCategorie () {
+    const response = await fetch ("")
+}
+export async function addElement (newTransaction) {
     try {
         const response = await fetch ("http://localhost:3000/history", {
             method: "POST",
             headers : {
             "Content-Type": "application/json"
             },
-            body: JSON.stringify(newAmount)
+            body: JSON.stringify(newTransaction)
         });
         const dataReponse = await response.json();
         return dataReponse;
