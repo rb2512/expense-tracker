@@ -5,8 +5,11 @@ export const btnHistorique = document.getElementById("btnHistorique");
 const formContainerDepense = document.getElementById("formContainerDepense");
 const formContainerRevenu = document.getElementById("formContainerRevenu");
 const historiqueContainer = document.getElementById("historiqueContainer");
+export const historiqueList = document.getElementById("historiqueList");
 export const btnCloseDepense = document.getElementById("btnCloseDepense");
 export const btnCloseRevenu = document.getElementById("btnCloseRevenu");
+const messageDepense = document.getElementById("messageDepense");
+const messageRevenu =document.getElementById("messageRevenu")
 
 export const formDepense = document.getElementById("formDepense");
 const inputMontantDepense = document.getElementById("montantDepense");
@@ -17,6 +20,20 @@ export const formRevenu = document.getElementById("formRevenu");
 const inputMontantRevenu = document.getElementById("montantRevenu");
 const inputCategorieRevenu = document.getElementById("categorieRevenu");
 const inputAccountTypeRevenu = document.getElementById("accountTypeRevenu");
+
+export function afficherSolde(newSolde) {
+    solde.textContent = `${newSolde} €`
+};
+export function afficherMessageDepense() {
+    messageDepense.textContent = "Dépense ajoutée avec succès";
+    messageDepense.style.color = "green";
+    return messageDepense;
+}
+export function afficherMessageRevenu() {
+    messageRevenu.textContent = "Revenu ajouté avec succès";
+    messageRevenu.style.color = "green";
+    return messageRevenu;
+}
 export function afficherFormDepense () {
     formContainerDepense.classList.remove("hidden");
     formContainerRevenu.classList.add("hidden");
@@ -38,34 +55,34 @@ export function toutDésafficher () {
     historiqueContainer.classList.add("hidden");
 };
 export function recupererInputDepense () {
-    const montantDepense = inputMontantDepense.value;
+    const montantDepense = Number(inputMontantDepense.value);
     const categorieDepense = inputCategorieDepense.value;
     const accountTypeDepense = inputAccountTypeDepense.value;
     return {montantDepense, categorieDepense, accountTypeDepense};
 };
 export function recupererInputRevenu () {
-    const montantRevenu = inputMontantRevenu.value;
+    const montantRevenu = Number(inputMontantRevenu.value);
     const categorieRevenu = inputCategorieRevenu.value;
     const accountTypeRevenu = inputAccountTypeRevenu.value;
     return {montantRevenu, categorieRevenu, accountTypeRevenu};
 };
-export function creerElement (element, newId, newDate) {
+export function creerElement (element) {
     const divEl = document.createElement("div");
     divEl.classList.add("transaction-row");
     const idEl = document.createElement("p");
-    idEl.textContent = newId;
+    idEl.textContent = element.id;
     const strongEl = document.createElement("strong");
     const montantEl = document.createElement("p");
-    montantEl.textContent = element.depense;
-    strongEl.appendChild(montantDepenseEl);
+    montantEl.textContent = `${element.montant} €`;
+    strongEl.appendChild(montantEl);
     const categorieEl = document.createElement("p");
     categorieEl.textContent = element.categorie;
     const typeEl = document.createElement("p");
     typeEl.textContent = element.type
     const accountTypeEl = document.createElement("p");
     accountTypeEl.textContent = element.accountType;
-    const dateEl = document.createElementr("p");
-    dateEl.textContent = newDate;
+    const dateEl = document.createElement("p");
+    dateEl.textContent = element.date;
     divEl.appendChild(idEl);
     divEl.appendChild(dateEl);
     divEl.appendChild(strongEl);
