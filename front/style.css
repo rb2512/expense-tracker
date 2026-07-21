@@ -1,19 +1,24 @@
 /* ============================================
-   Suivi des dépenses — thème fintech sombre
+   Suivi des dépenses — thème "terminal de trading"
+   Palette : #0a0c10 (bg) · #12151c (panel) · #181c25 (panel-alt)
+             #232833 (border) · #5b9dfb (bleu) · #34d399 (vert)
+             #fb7185 (rouge) · #f2c14e (ambre, accent signature)
    ============================================ */
 
 :root {
-  --bg: #0e1015;
-  --panel: #171a21;
-  --panel-alt: #1e222b;
-  --border: #262b36;
+  --bg: #0a0c10;
+  --panel: #12151c;
+  --panel-alt: #181c25;
+  --border: #232833;
   --text: #e7e9ee;
-  --text-muted: #8b93a3;
+  --text-muted: #7d8494;
   --accent-blue: #5b9dfb;
   --accent-green: #34d399;
   --accent-red: #fb7185;
+  --accent-amber: #f2c14e;
   --focus: #5b9dfb;
   --radius: 10px;
+  --radius-lg: 14px;
   --mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
   --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
@@ -25,86 +30,116 @@
 body {
   margin: 0;
   min-height: 100vh;
-  padding: 32px 20px 80px;
+  padding: 40px 24px 100px;
   background: var(--bg);
   background-image:
-    radial-gradient(circle at 15% 0%, rgba(91, 157, 251, 0.08), transparent 40%),
-    radial-gradient(circle at 85% 10%, rgba(52, 211, 153, 0.06), transparent 45%);
+    radial-gradient(circle at 10% -10%, rgba(91, 157, 251, 0.10), transparent 42%),
+    radial-gradient(circle at 100% 0%, rgba(242, 193, 78, 0.06), transparent 50%);
   font-family: var(--sans);
   color: var(--text);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center
+
+  /* Grille "dashboard" : colonne fixe (identité + actions) + colonne large (contenu) */
+  display: grid;
+  grid-template-columns: 300px minmax(0, 760px);
+  grid-template-areas:
+    "titre   titre"
+    "solde   panneau"
+    "actions panneau";
+  column-gap: 28px;
+  row-gap: 20px;
+  justify-content: center;
+  align-items: start;
 }
 
 h1 {
-  font-size: 1.5rem;
+  grid-area: titre;
+  font-size: 1.1rem;
   font-weight: 600;
-  letter-spacing: -0.01em;
-  margin: 0 0 28px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin: 0 0 4px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+  max-width: 1088px;
+  width: 100%;
+  grid-column: 1 / -1;
 }
 
-/* ---------- Solde : l'élément signature, façon afficheur de ticker ---------- */
+h1::before {
+  content: "◆ ";
+  color: var(--accent-amber);
+}
+
+/* ---------- Colonne gauche : solde + actions (sidebar façon identité de compte) ---------- */
 
 #soldeContainer {
-  width: 100%;
-  max-width: 480px;
-  background: linear-gradient(180deg, var(--panel-alt), var(--panel));
+  grid-area: solde;
+  background: linear-gradient(165deg, var(--panel-alt), var(--panel));
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 22px 28px;
-  margin-bottom: 24px;
-  text-align: center;
+  border-radius: var(--radius-lg);
+  padding: 26px 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* signature : liseré ambre en haut, façon "ticker" de marché */
+#soldeContainer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-amber), transparent 70%);
 }
 
 #soldeContainer h2 {
   margin: 0;
-  font-size: 0.85rem;
-  font-weight: 500;
+  font-size: 0.72rem;
+  font-weight: 600;
   color: var(--text-muted);
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
 }
 
 #solde {
   display: block;
-  margin-top: 6px;
+  margin-top: 10px;
   font-family: var(--mono);
-  font-size: 2.4rem;
+  font-size: 2.6rem;
   font-weight: 500;
-  letter-spacing: 0.01em;
+  letter-spacing: -0.01em;
   font-variant-numeric: tabular-nums;
   color: var(--text);
+  word-break: break-word;
 }
 
-/* états optionnels : ajoutez ces classes en JS selon le signe du solde */
 #solde.positif { color: var(--accent-green); }
 #solde.negatif { color: var(--accent-red); }
 
-/* ---------- Boutons d'action (segmented control) ---------- */
+/* ---------- Actions : empilées verticalement dans la sidebar ---------- */
 
 #divBtn {
+  grid-area: actions;
   display: flex;
-  gap: 8px;
-  width: 100%;
-  max-width: 480px;
+  flex-direction: column;
+  gap: 6px;
   background: var(--panel);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 6px;
-  margin-bottom: 24px;
+  border-radius: var(--radius-lg);
+  padding: 8px;
 }
 
 #divBtn button {
-  flex: 1;
-  padding: 10px 12px;
+  text-align: left;
+  padding: 12px 14px;
   background: transparent;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   color: var(--text-muted);
   font-family: var(--sans);
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   font-weight: 500;
   cursor: pointer;
   transition: background 0.15s ease, color 0.15s ease;
@@ -117,53 +152,22 @@ h1 {
 
 #divBtn button:focus-visible {
   outline: 2px solid var(--focus);
-  outline-offset: 2px;
+  outline-offset: -2px;
 }
 
-#btnAddDepense:hover { color: var(--accent-red); }
-#btnAddRevenu:hover { color: var(--accent-green); }
-#btnHistorique:hover { color: var(--accent-blue); }
+#btnAddDepense::before { content: "− "; color: var(--accent-red); font-family: var(--mono); }
+#btnAddRevenu::before { content: "+ "; color: var(--accent-green); font-family: var(--mono); }
+#btnHistorique::before { content: "≡ "; color: var(--accent-blue); font-family: var(--mono); }
 
-/* ---------- Conteneur des formulaires / historique ---------- */
+/* ---------- Colonne droite : panneau principal (formulaires OU historique) ---------- */
+
+.form-container,
+#historiqueContainer {
+  grid-area: panneau;
+}
+
 .hidden {
   display: none !important;
-}
-#btnCloseDepense,
-#btnCloseRevenu {
-  width: 28px;
-  height: 28px;
-  border: none;
-  border-radius: 50%;
-  background: var(--accent-red);
-  color: #ffffff;
-  font-size: 0.8rem;
-  font-weight: 700;
-  line-height: 1;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  align-self: center; /* centré horizontalement dans le form (flex-direction: column) */
-  transition: opacity 0.15s ease;
-}
-
-#btnCloseDepense:hover,
-#btnCloseRevenu:hover {
-  opacity: 0.85;
-}
-
-#btnCloseDepense:focus-visible,
-#btnCloseRevenu:focus-visible {
-  outline: 2px solid var(--focus);
-  outline-offset: 2px;
-}
-
-.form-container {
-  width: 100%;
-  max-width: 480px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
 }
 
 #formDepense,
@@ -171,43 +175,67 @@ h1 {
 #historiqueContainer {
   background: var(--panel);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 24px;
+  border-radius: var(--radius-lg);
+  padding: 28px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
 #formDepense h3,
 #formRevenu h3,
 #historiqueContainer h3 {
-  margin: 0 0 4px;
-  font-size: 1rem;
+  margin: 0 0 6px;
+  font-size: 0.95rem;
   font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-/* liseré de couleur selon le type de formulaire */
-#formDepense {
-  border-left: 3px solid var(--accent-red);
+#formDepense { border-left: 3px solid var(--accent-red); }
+#formRevenu { border-left: 3px solid var(--accent-green); }
+#historiqueContainer { border-left: 3px solid var(--accent-blue); }
+
+#btnCloseDepense,
+#btnCloseRevenu {
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: 50%;
+  background: var(--panel-alt);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  align-self: flex-end;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s ease, border-color 0.15s ease;
 }
 
-#formRevenu {
-  border-left: 3px solid var(--accent-green);
+#btnCloseDepense:hover,
+#btnCloseRevenu:hover {
+  color: var(--accent-red);
+  border-color: var(--accent-red);
 }
 
 label {
-  font-size: 0.8rem;
+  font-size: 0.76rem;
   color: var(--text-muted);
-  margin-bottom: -6px;
+  margin-bottom: -8px;
 }
 
 input,
 select {
   width: 100%;
-  padding: 10px 12px;
+  padding: 11px 13px;
   background: var(--panel-alt);
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: 8px;
   color: var(--text);
   font-family: var(--sans);
   font-size: 0.9rem;
@@ -226,6 +254,7 @@ select:focus {
 
 select {
   appearance: none;
+  cursor: pointer;
   background-image: linear-gradient(45deg, transparent 50%, var(--text-muted) 50%),
                      linear-gradient(135deg, var(--text-muted) 50%, transparent 50%);
   background-position: calc(100% - 18px) center, calc(100% - 13px) center;
@@ -234,40 +263,32 @@ select {
 }
 
 button[type="submit"] {
-  margin-top: 8px;
-  padding: 11px;
+  margin-top: 6px;
+  padding: 12px;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   font-family: var(--sans);
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
-  color: #0e1015;
-  transition: opacity 0.15s ease;
+  color: #0a0c10;
+  transition: opacity 0.15s ease, transform 0.1s ease;
 }
 
-#formDepense button[type="submit"] {
-  background: var(--accent-red);
+#formDepense button[type="submit"] { background: var(--accent-red); }
+#formRevenu button[type="submit"] { background: var(--accent-green); }
+
+button[type="submit"]:hover { opacity: 0.88; }
+button[type="submit"]:active { transform: scale(0.98); }
+button[type="submit"]:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+.message {
+  font-size: 0.8rem;
+  min-height: 1em;
+  margin: 0;
 }
 
-#formRevenu button[type="submit"] {
-  background: var(--accent-green);
-}
-
-button[type="submit"]:hover {
-  opacity: 0.88;
-}
-
-button[type="submit"]:focus-visible {
-  outline: 2px solid var(--focus);
-  outline-offset: 2px;
-}
-
-/* ---------- Historique : présentation façon relevé de compte ---------- */
-
-#historiqueContainer {
-  border-left: 3px solid var(--accent-blue);
-}
+/* ---------- Historique : relevé de compte, large et lisible ---------- */
 
 #historiqueList {
   list-style: none;
@@ -275,47 +296,16 @@ button[type="submit"]:focus-visible {
   padding: 0;
   display: flex;
   flex-direction: column;
+  max-height: 560px;
+  overflow-y: auto;
 }
-
-#historiqueList li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--border);
-  font-size: 0.88rem;
-}
-
-#historiqueList li:last-child {
-  border-bottom: none;
-}
-
-/* montant affiché en monospace, aligné à droite */
-#historiqueList li .montant {
-  font-family: var(--mono);
-  font-variant-numeric: tabular-nums;
-  font-weight: 500;
-}
-
-/* classes optionnelles à ajouter en JS sur chaque <li> ou son montant */
-.transaction-depense .montant,
-#historiqueList li.depense .montant {
-  color: var(--accent-red);
-}
-
-.transaction-revenu .montant,
-#historiqueList li.revenu .montant {
-  color: var(--accent-green);
-}
-
-/* ---------- Ligne de transaction façon tableau ---------- */
 
 .transaction-row {
   display: grid;
-  grid-template-columns: 48px 1fr 1fr 1fr;
+  grid-template-columns: 44px 90px 1fr 130px 140px 130px;
   align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
+  gap: 14px;
+  padding: 13px 12px;
   border-bottom: 1px solid var(--border);
   font-size: 0.85rem;
 }
@@ -328,19 +318,29 @@ button[type="submit"]:focus-visible {
   background: var(--panel-alt);
 }
 
-/* colonne ID : discrète */
+/* colonne ID */
 .transaction-row > p:first-child {
   color: var(--text-muted);
   font-family: var(--mono);
+  font-size: 0.78rem;
   margin: 0;
 }
 
-/* colonne montant : mise en avant, alignée comme un chiffre */
+/* colonne date */
+.transaction-row > p:nth-child(2) {
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+/* colonne montant, mise en avant */
 .transaction-row strong {
   font-family: var(--mono);
   font-variant-numeric: tabular-nums;
   font-weight: 600;
   text-align: right;
+  font-size: 0.92rem;
 }
 
 .transaction-row strong p {
@@ -348,9 +348,24 @@ button[type="submit"]:focus-visible {
 }
 
 /* colonne catégorie */
-.transaction-row > p:nth-child(3) {
+.transaction-row > p:nth-child(4) {
   margin: 0;
   color: var(--text);
+  font-weight: 500;
+}
+
+/* colonne type (revenu/dépense) */
+.transaction-row > p:nth-child(5) {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: var(--panel-alt);
+  justify-self: start;
+  color: var(--text-muted);
 }
 
 /* colonne type de compte */
@@ -358,25 +373,69 @@ button[type="submit"]:focus-visible {
   margin: 0;
   color: var(--text-muted);
   text-align: right;
+  font-size: 0.8rem;
 }
 
-/* ---------- Responsive ---------- */
+/* couleur du montant selon le type de transaction
+   (nécessite que creerElement() ajoute la classe "revenu" ou "depense"
+   sur divEl — voir note après le fichier) */
+.transaction-row.revenu strong {
+  color: var(--accent-green);
+}
 
-@media (max-width: 480px) {
+.transaction-row.depense strong {
+  color: var(--accent-red);
+}
+
+/* ---------- Scrollbar discrète pour l'historique ---------- */
+
+#historiqueList::-webkit-scrollbar {
+  width: 6px;
+}
+
+#historiqueList::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+/* ---------- Responsive : la sidebar repasse au-dessus sur mobile ---------- */
+
+@media (max-width: 900px) {
   body {
-    padding: 20px 14px 60px;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "titre"
+      "solde"
+      "actions"
+      "panneau";
+    padding: 24px 16px 60px;
   }
 
-  #solde {
-    font-size: 1.9rem;
+  h1 {
+    grid-column: 1;
   }
 
   #divBtn {
-    flex-wrap: wrap;
+    flex-direction: row;
   }
 
   #divBtn button {
-    flex: 1 1 45%;
+    flex: 1;
+    text-align: center;
+  }
+
+  .transaction-row {
+    grid-template-columns: 32px 1fr auto;
+    grid-template-areas:
+      "id categorie montant"
+      "date type accountType";
+    row-gap: 4px;
+  }
+
+  .transaction-row > p:nth-child(2),
+  .transaction-row > p:nth-child(5),
+  .transaction-row > p:last-child {
+    font-size: 0.72rem;
   }
 }
 
